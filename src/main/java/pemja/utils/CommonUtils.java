@@ -42,7 +42,11 @@ public class CommonUtils {
 
     public void loadPython(String pythonExec) {
         String pythonLibPath = getPythonLibrary(pythonExec);
-        loadLibrary(pythonLibPath, "libpython");
+        if (isMacOs()) {
+            loadLibrary(pythonLibPath, "Python");
+        } else {
+            loadLibrary(pythonLibPath, "libpython");
+        }
         loadPythonLibrary(pythonExec, "pemja_utils");
         // Because JVM can't load library globally, so we need to load CPython library globally.
         loadLibrary0(pythonLibPath);
@@ -196,6 +200,11 @@ public class CommonUtils {
     private boolean isWindowsOs() {
         String os = System.getProperty("os.name");
         return os.startsWith("Windows");
+    }
+
+    private boolean isMacOs() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.startsWith("mac") || os.contains("darwin");
     }
 
     private String getPythonCommand() {
