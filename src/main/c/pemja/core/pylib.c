@@ -15,6 +15,7 @@
 #include "Pemja.h"
 #include "python_class/PythonClass.h"
 #include "java_class/JavaClass.h"
+#include <stdlib.h> // for setenv, putenv
 
 static PyThreadState *JcpMainThreadState = NULL;
 
@@ -276,8 +277,17 @@ void JcpPy_Initialize(JNIEnv *env, jstring python_home, jstring working_dir) {
   // Cache java classes
   Jcp_CacheClasses(env);
 
-  // Initialize Python
+
+  if (python_home) {
+      const char *python_home_chars =
+          (*env)->GetStringUTFChars(env, python_home, NULL);
+      Py_SetPythonHome(Py_DecodeLocale(python_home_chars, NULL));
+      (*env)->ReleaseStringUTFChars(env, python_home, python_home_chars);
+    }
+
+// Initialize Python
   Py_Initialize();
+
 
 #if PY_MINOR_VERSION < 9
   // Initialize Python thread support
@@ -323,14 +333,8 @@ void JcpPy_Initialize(JNIEnv *env, jstring python_home, jstring working_dir) {
 
   PySys_SetArgv(1, argv);
 
-  if (python_home) {
-    const char *python_home_chars =
-        (*env)->GetStringUTFChars(env, python_home, NULL);
-    Py_SetPythonHome(Py_DecodeLocale(python_home_chars, NULL));
-    (*env)->ReleaseStringUTFChars(env, python_home, python_home_chars);
-  }
 
-  if (working_dir) {
+  if (working_dir && working_dir!= "null") {
     const char *working_dir_chars =
         (*env)->GetStringUTFChars(env, working_dir, NULL);
     chdir(working_dir_chars);

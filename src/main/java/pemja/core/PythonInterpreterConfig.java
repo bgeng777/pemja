@@ -93,6 +93,25 @@ public final class PythonInterpreterConfig {
         return execType;
     }
 
+    @Override
+    public String toString() {
+        return "PythonInterpreterConfig{"
+                + "pythonHome='"
+                + pythonHome
+                + '\''
+                + ", workingDirectory='"
+                + workingDirectory
+                + '\''
+                + ", paths="
+                + Arrays.toString(paths)
+                + ", pythonExec='"
+                + pythonExec
+                + '\''
+                + ", execType="
+                + execType
+                + '}';
+    }
+
     /** A builder for configuring the {@link PythonInterpreterConfig}. */
     public static PythonInterpreterConfigBuilder newBuilder() {
         return new PythonInterpreterConfigBuilder();

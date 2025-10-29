@@ -36,7 +36,7 @@ public class CommonUtils {
             "from find_libpython import find_libpython;" + "print(find_libpython())";
 
     private static final String GET_PEMJA_MODULE_PATH_SCRIPT =
-            "import pemja;" + "import os;" + "print(os.path.dirname(pemja.__file__))";
+            "import pemja; import os; print(os.path.dirname(pemja.__file__))";
 
     private CommonUtils() {}
 
@@ -64,10 +64,13 @@ public class CommonUtils {
                     "python",
                     "pemja");
         } else {
+
             String out;
             try {
+                System.out.println("gh getPythonModulePath gg pythonExec: " + pythonExec);
+                Thread.sleep(10000);
                 out = execute(new String[] {pythonExec, "-c", GET_PEMJA_MODULE_PATH_SCRIPT});
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new RuntimeException("Failed to get PemJa module path", e);
             }
             return String.join(File.pathSeparator, out.trim().split("\n"));
@@ -133,9 +136,11 @@ public class CommonUtils {
         } else {
             String sitePackagesPath;
             try {
+                System.out.println("getPythonLibrary gg pythonExec: " + pythonExec + " " + pattern);
+                Thread.sleep(10000);
                 String out = execute(new String[] {pythonExec, "-c", GET_PEMJA_MODULE_PATH_SCRIPT});
                 sitePackagesPath = String.join(File.pathSeparator, out.trim().split("\n"));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(
                         "Failed to get pemja path. You need to `pip install pemja` firstly.", e);
             }
@@ -153,6 +158,8 @@ public class CommonUtils {
 
     private String getPythonLibrary(String pythonExec) {
         try {
+            System.out.println("getPythonLibraryk pythonExec: " + pythonExec);
+            Thread.sleep(10000);
             String out;
             if (pythonExec == null) {
                 // run in source code, use default `python3` / `python` to find python lib library.
@@ -161,7 +168,7 @@ public class CommonUtils {
                 out = execute(new String[] {pythonExec, "-c", GET_PYTHON_LIB_PATH_SCRIPT});
             }
             return String.join(File.pathSeparator, out.trim().split("\n"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to find libpython", e);
         }
     }

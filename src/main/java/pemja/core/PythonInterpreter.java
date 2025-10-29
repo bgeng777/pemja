@@ -16,6 +16,8 @@
 
 package pemja.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pemja.utils.CommonUtils;
 
 import java.io.File;
@@ -25,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
 
 /** The Interpreter implementation for Python Interpreter. */
 public final class PythonInterpreter implements Interpreter {
-
+    private static final Logger LOG = LoggerFactory.getLogger(PythonInterpreter.class);
     private static final long serialVersionUID = 1L;
 
     private final MainInterpreter mainInterpreter = MainInterpreter.instance;
@@ -42,6 +44,12 @@ public final class PythonInterpreter implements Interpreter {
      * @param config the PythonInterpreterConfig object for constructing a Python Interpreter.
      */
     public PythonInterpreter(PythonInterpreterConfig config) {
+        LOG.warn("construct PythonInterpreter: {}", config);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         initialize(config);
     }
 
@@ -363,7 +371,12 @@ public final class PythonInterpreter implements Interpreter {
         synchronized void initialize(PythonInterpreterConfig config) {
             if (!isStarted) {
                 CommonUtils.INSTANCE.loadPython(config.getPythonExec());
-
+                try {
+                    System.out.println("initialize PythonHome: " + config.getPythonHome());
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 // We load on a separate thread to try and avoid GIL issues that come about from a
                 // being on the same thread as the main interpreter.
                 thread =
@@ -371,8 +384,22 @@ public final class PythonInterpreter implements Interpreter {
                             @Override
                             public void run() {
                                 try {
-                                    initialize(
-                                            config.getPythonHome(), config.getWorkingDirectory());
+                                    System.out.println(
+                                            "DDDDDD try PythonHome: "
+                                                    + config.getPythonHome()
+                                                    + " config.getPythonExec() "
+                                                    + config.getPythonExec()
+                                                    + " config.getWorkingDirectory() "
+                                                    + config.getWorkingDirectory());
+                                    Thread.sleep(10000);
+                                    initialize(config.getPythonHome(), null);
+                                    System.out.println(
+                                            "DDDDDD initi PythonHome: "
+                                                    + config.getPythonHome()
+                                                    + " config.getPythonExec() "
+                                                    + config.getPythonExec()
+                                                    + " config.getWorkingDirectory() "
+                                                    + config.getWorkingDirectory());
                                     // add shared modules
                                     addToPath(
                                             CommonUtils.INSTANCE.getPemJaModulePath(
@@ -394,6 +421,12 @@ public final class PythonInterpreter implements Interpreter {
                 thread.setDaemon(true);
                 thread.start();
 
+                try {
+                    System.out.println("kkkkkkkkkk PythonHome: " + config.getPythonHome());
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 try {
                     damonThreadStart.await();
                 } catch (InterruptedException e) {
