@@ -43,14 +43,11 @@ def _map_log_level(
 class PythonLogHandler(logging.Handler):
     def __init__(self):
         super().__init__()
-        self._logger_writer = None
+        from pemja import findClass
+        PythonLogWriter = findClass('pemja.core.log.PythonLogWriter')
+        self._logger_writer = PythonLogWriter()
 
     def emit(self, record: logging.LogRecord):
-        if self._logger_writer is None:
-            from pemja import findClass
-            PythonLogWriter = findClass('pemja.core.log.PythonLogWriter')
-            self._logger_writer = PythonLogWriter()
-
         message = self.format(record)
         name = '%s:%s' % (
             record.pathname or record.module, record.lineno or record.funcName)
