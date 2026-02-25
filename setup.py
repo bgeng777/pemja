@@ -63,17 +63,14 @@ def get_java_home():
                   file=sys.stderr)
             sys.exit(-1)
 
-    if is_windows():
-        java_path = shutil.which("java")
-        if java_path is None:
-            print('Can not determine JAVA_HOME from environment variable nor java executable path.',
-                  file=sys.stderr)
-            sys.exit(-1)
-        exe_home = os.path.dirname(os.path.dirname(java_path))
-        _java_home = exe_home
-        return exe_home
-
-    return None
+    java_path = shutil.which("java")
+    if java_path is None:
+        print('Can not determine JAVA_HOME from environment variable nor java executable path.',
+              file=sys.stderr)
+        sys.exit(-1)
+    exe_home = os.path.dirname(os.path.dirname(java_path))
+    _java_home = exe_home
+    return exe_home
 
 
 def is_osx():
