@@ -88,10 +88,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.15.0
+        uses: pypa/cibuildwheel@v2.21.0
         env:
           CIBW_BUILD_VERBOSITY: 3
           CIBW_ARCHS_LINUX: aarch64
@@ -137,7 +137,7 @@ jobs:
           python-version: '3.x'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.15.0
+        uses: pypa/cibuildwheel@v2.21.0
         env:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
 
