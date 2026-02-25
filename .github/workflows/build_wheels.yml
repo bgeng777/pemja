@@ -98,6 +98,10 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: aarch64
           CIBW_BUILD: ${{ matrix.python }}-manylinux_aarch64
+          CIBW_BEFORE_ALL_LINUX: yum install -y java-1.8.0-openjdk-devel
+          CIBW_ENVIRONMENT_LINUX: >
+            JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+            PATH=/usr/lib/jvm/java-1.8.0-openjdk/bin:$PATH
       - name: Upload wheels as artifacts
         uses: actions/upload-artifact@v4
         with:
