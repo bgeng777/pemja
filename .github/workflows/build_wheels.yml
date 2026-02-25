@@ -70,7 +70,7 @@ jobs:
           path: ./dist/
 
   build_wheels_linux_aarch64:
-    name: Build python wheel for ${{ matrix.python }}-Linux-aarch64
+    name: Build python wheel for Linux-aarch64
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
