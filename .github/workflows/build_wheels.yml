@@ -96,6 +96,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.15.0
         env:
+          CIBW_ARCHS_LINUX: aarch64
           CIBW_BUILD: ${{ matrix.python }}-manylinux_aarch64
       - name: Upload wheels as artifacts
         uses: actions/upload-artifact@v4
